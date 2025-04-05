@@ -1,5 +1,6 @@
 package com.bartosz_siedlecki.githubrepoapi.tests;
 
+import com.bartosz_siedlecki.githubrepoapi.exceptions.UserNotFound;
 import com.bartosz_siedlecki.githubrepoapi.service.GithubRepoService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
@@ -36,11 +37,13 @@ public class GithubRepositoryTest {
 
     @Test
     public void whenUserNotFoundThenReturns404() throws Exception {
-        mockMvc.perform(get("/api/github-repos/qMonteriskoq"))
+        when(githubRepoService.getRepositoriesWithoutForksFromUser("usernotexits"))
+                .thenThrow(new UserNotFound("User usernotexits not found"));
+        mockMvc.perform(get("/api/github-repos/usernotexits"))
                 .andExpect(status().isNotFound())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.status").value("404"))
-                .andExpect(jsonPath("$.message").value("User qMonteriskoq not found"));
+                .andExpect(jsonPath("$.message").value("User usernotexits not found"));
     }
 
     @Test

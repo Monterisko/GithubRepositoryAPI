@@ -14,7 +14,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/github-repos")
 public class GithubRepositoryController {
-    private GithubRepoService githubRepoService;
+    private final GithubRepoService githubRepoService;
 
     public GithubRepositoryController(GithubRepoService githubRepoService) {
         this.githubRepoService = githubRepoService;
